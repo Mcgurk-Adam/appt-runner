@@ -1,0 +1,21 @@
+name: Webhook invokable schedule scraper
+on:
+  repository_dispatch:
+    types: [schedule-scraper]
+jobs:
+  run:
+    runs-on: macos-11
+    env:
+      APP_TOKEN: ${{ secrets.APP_TOKEN }}
+      APP_URL: ${{ secrets.APP_URL }}
+      CONFIRMATION_TEXT: ${{ secrets.CONFIRMATION_TEXT }}
+      LOGIN_PAGE: ${{ secrets.LOGIN_PAGE }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      SCHEDULE_BUTTON_SELECTOR: ${{ secrets.SCHEDULE_BUTTON_SELECTOR }}
+      USERNAME: ${{ secrets.USERNAME }}
+    name: Scrape for the schedule
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Pull the schedule times
+        run: ./ci/get-schedule.sh ${{ github.event.client_payload.check_schedule_date }}

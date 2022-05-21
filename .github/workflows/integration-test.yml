@@ -1,0 +1,21 @@
+name: Integration Test
+on: [push]
+jobs:
+  run:
+    runs-on: macos-11
+    env:
+      APP_TOKEN: ${{ secrets.APP_TOKEN }}
+      APP_URL: ${{ secrets.APP_URL }}
+      CONFIRMATION_TEXT: ${{ secrets.CONFIRMATION_TEXT }}
+      LOGIN_PAGE: ${{ secrets.LOGIN_PAGE }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      SCHEDULE_BUTTON_SELECTOR: ${{ secrets.SCHEDULE_BUTTON_SELECTOR }}
+      USERNAME: ${{ secrets.USERNAME }}
+    name: Full Integration Test
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Run Integration Test
+        run: ./ci/test-get-schedule.sh
+      - name: Run Schedule Integration Test
+        run: ./ci/test-schedule-time.sh
