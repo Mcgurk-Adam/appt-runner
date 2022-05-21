@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"removeComments": true,
+		"target": "es2019",
+		"lib": ["ES2019"],
+		"sourceMap": false,
+		"moduleResolution": "Node"
+	},
+	"files": [
+		"../../app/Html/ElementInteraction.ts",
+		"../../app/Command.ts",
+		"index.ts"
+	]
+}
