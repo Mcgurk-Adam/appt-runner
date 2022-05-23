@@ -15,7 +15,6 @@ const driver = new Builder().forBrowser("chrome").setChromeService(service).buil
 const document = new ElementInteraction(driver);
 console.log(`Trying to schedule available kids zone appointments on ${command.desiredDate} at ${command.desiredTime}`);
 (async () => {
-    console.log("we do get here");
     await command.performActionInBrowser("login", async () => await login(driver, document));
     await command.performActionInBrowser("navigate to kids zone", async () => await navigateToKidsZone(document));
     await command.performActionInBrowser("go to the correct date", async () => await goToCorrectDate(document, command.desiredDate));
