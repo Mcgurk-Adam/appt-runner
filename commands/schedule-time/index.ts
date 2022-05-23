@@ -1,7 +1,5 @@
 // @ts-ignore hate ignoring this, it's just not an issue
-import {navigateToKidsZone} from "../../app/actions";
-
-const { login } = require("../../app/actions");
+const { login, navigateToKidsZone, goToCorrectDate } = require("../../app/actions");
 const { Builder } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 const fetch = require("node-fetch");
@@ -19,7 +17,7 @@ console.log(`Trying to schedule available kids zone appointments on ${command.de
     console.log("we do get here");
     await command.performActionInBrowser("login", async () => await login(driver, document));
     await command.performActionInBrowser("navigate to kids zone", async () => await navigateToKidsZone(document));
-    await command.performActionInBrowser("go to the correct date", async () => await goToCorrectDate(document));
+    await command.performActionInBrowser("go to the correct date", async () => await goToCorrectDate(document, command.desiredDate));
     await command.performActionInBrowser("click on the right button", async () => {
         const dateObject = new Date(command.desiredDate);
         const dayArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

@@ -25,7 +25,7 @@ async function navigateToKidsZone(document): Promise<void> {
 }
 
 // @ts-ignore hate ignoring this, it's just not an issue
-async function goToCorrectDate(document): Promise<void> {
+async function goToCorrectDate(document, desiredDate): Promise<void> {
     const dateInput = await document.getElementById("txtDate");
     const dateValue = await dateInput.getAttribute("value");
     await Command.wait(100);
@@ -33,8 +33,32 @@ async function goToCorrectDate(document): Promise<void> {
         await document.type(dateInput, Key.BACK_SPACE);
         await Command.wait(50);
     }
-    await document.type(dateInput, command.desiredDate);
+    await document.type(dateInput, desiredDate);
     await document.type(dateInput, Key.RETURN);
+}
+
+async function getCorrectDayOfWeekRow(document, desiredDate) {
+    const dateObject = new Date(desiredDate);
+    const dayArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const dayOfWeekString = dayArray[dateObject.getDay()];
+    const tableRows = await document.querySelectorAll("table#classSchedule-mainTable tbody tr");
+    let foundDayOfWeek = false;
+    let dayOfWeekRow;
+    for (const row of tableRows) {
+        const firstTd = await document.querySelector("td", row);
+        const className = await firstTd.getAttribute("class");
+        const rowIsHeader = className.includes("header");
+        if (rowIsHeader) {
+            if (foundDayOfWeek) break;
+            const labelElement = await document.querySelector(".headText", firstTd);
+            const labelText = await labelElement.getAttribute("innerText");
+            foundDayOfWeek = labelText.toLowerCase().includes(dayOfWeekString.toLowerCase());
+        } else if (foundDayOfWeek) {
+            dayOfWeekRow = row;
+            break;
+        }
+    }
+    return dayOfWeekRow;
 }
 
 module.exports = {

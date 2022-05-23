@@ -17,7 +17,7 @@ console.log(`Checking available kids zone appointments for ${command.desiredDate
 (async () => {
     await command.performActionInBrowser("login", async () => await login(driver, document));
     await command.performActionInBrowser("navigate to kids zone", async () => await navigateToKidsZone(document));
-    await command.performActionInBrowser("go to the correct date", async () => await goToCorrectDate(document));
+    await command.performActionInBrowser("go to the correct date", async () => await goToCorrectDate(document, command.desiredDate));
     await command.performActionInBrowser("get all the possible times", async () => {
         const dateObject = new Date(command.desiredDate);
         const dayArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
