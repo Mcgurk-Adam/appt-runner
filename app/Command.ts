@@ -50,9 +50,9 @@ class Command {
     /**
      * This is where you handle the custom actions to perform...login, navigation, etc...
      * @param {string} actionName give this a describable name, so it's discernible
-     * @param {Function} action this handles all the logic for performing your action
+     * @param action this handles all the logic for performing your action
      */
-    async performActionInBrowser(actionName:string, action:Function): Promise<void> {
+    async performActionInBrowser(actionName:string, action): Promise<void> {
         try {
             await Command.wait(1500);
             console.log(`${actionName}`);

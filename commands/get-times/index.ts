@@ -1,3 +1,5 @@
+import {login} from "../../app/actions";
+
 const { Builder, Key } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 const fetch = require("node-fetch");
@@ -13,20 +15,7 @@ const driver = new Builder().forBrowser("chrome").setChromeService(service).buil
 const document = new ElementInteraction(driver);
 console.log(`Checking available kids zone appointments for ${command.desiredDate}`);
 (async () => {
-    await command.performActionInBrowser("login", async () => {
-        await driver.get(process.env.LOGIN_PAGE);
-        const title = await driver.getTitle();
-        if (!title.toLowerCase().includes(process.env.CONFIRMATION_TEXT)) {
-            throw new Error("Did not get to the page");
-        }
-        await Command.wait(2000);
-        const loginInput = await document.getElementByName("requiredtxtUserName");
-        const passwordInput = await document.getElementByName("requiredtxtPassword");
-        const loginButton = await document.getElementByName("btnSignUp2");
-        await document.type(loginInput, process.env.USERNAME);
-        await document.type(passwordInput, process.env.PASSWORD);
-        await document.click(loginButton);
-    });
+    await command.performActionInBrowser("login", login(driver, document));
     await command.performActionInBrowser("navigate to kids zone", async () => {
         const kidsZoneLink = await document.getElementById("tabA104");
         await document.click(kidsZoneLink);
