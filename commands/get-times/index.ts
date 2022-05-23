@@ -1,7 +1,7 @@
 // @ts-ignore hate ignoring this, it's just not an issue
-const { login } = require("../../app/actions");
+const { login, navigateToKidsZone, goToCorrectDate } = require("../../app/actions");
 
-const { Builder, Key } = require('selenium-webdriver');
+const { Builder } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 const fetch = require("node-fetch");
 // @ts-ignore I hate hate hate ignoring this...but it just isn't an issue
@@ -16,21 +16,8 @@ const document = new ElementInteraction(driver);
 console.log(`Checking available kids zone appointments for ${command.desiredDate}`);
 (async () => {
     await command.performActionInBrowser("login", async () => await login(driver, document));
-    await command.performActionInBrowser("navigate to kids zone", async () => {
-        const kidsZoneLink = await document.getElementById("tabA104");
-        await document.click(kidsZoneLink);
-    });
-    await command.performActionInBrowser("go to the correct date", async () => {
-        const dateInput = await document.getElementById("txtDate");
-        const dateValue = await dateInput.getAttribute("value");
-        await Command.wait(100);
-        for (let i = 0; i < dateValue.length; i++) {
-            await document.type(dateInput, Key.BACK_SPACE);
-            await Command.wait(50);
-        }
-        await document.type(dateInput, command.desiredDate);
-        await document.type(dateInput, Key.RETURN);
-    });
+    await command.performActionInBrowser("navigate to kids zone", async () => await navigateToKidsZone(document));
+    await command.performActionInBrowser("go to the correct date", async () => await goToCorrectDate(document));
     await command.performActionInBrowser("get all the possible times", async () => {
         const dateObject = new Date(command.desiredDate);
         const dayArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

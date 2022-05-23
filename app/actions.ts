@@ -1,5 +1,6 @@
 // @ts-ignore hate ignoring this, it's just not an issue
 const { Command } = require("./Command");
+const { Key } = require('selenium-webdriver');
 
 // @ts-ignore hate ignoring this, it's just not an issue
 async function login(driver, document): Promise<void> {
@@ -17,4 +18,27 @@ async function login(driver, document): Promise<void> {
     await document.click(loginButton);
 }
 
-module.exports.login = login;
+// @ts-ignore hate ignoring this, it's just not an issue
+async function navigateToKidsZone(document): Promise<void> {
+    const kidsZoneLink = await document.getElementById("tabA104");
+    await document.click(kidsZoneLink);
+}
+
+// @ts-ignore hate ignoring this, it's just not an issue
+async function goToCorrectDate(document): Promise<void> {
+    const dateInput = await document.getElementById("txtDate");
+    const dateValue = await dateInput.getAttribute("value");
+    await Command.wait(100);
+    for (let i = 0; i < dateValue.length; i++) {
+        await document.type(dateInput, Key.BACK_SPACE);
+        await Command.wait(50);
+    }
+    await document.type(dateInput, command.desiredDate);
+    await document.type(dateInput, Key.RETURN);
+}
+
+module.exports = {
+    login: login,
+    navigateToKidsZone: navigateToKidsZone,
+    goToCorrectDate: goToCorrectDate,
+};
