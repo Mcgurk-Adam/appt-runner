@@ -75,9 +75,9 @@ console.log(`Checking available kids zone appointments for ${command.desiredDate
                 timeArray.push(tdText.replace(/\s/g, '').replace(/[a-z]/gi, ''));
             }
         }
-        const appHttp = new AppHttp();
+        const appHttp = new AppHttp(command.isDryRun);
         await appHttp.post("/github/send-time-options", JSON.stringify({
             possible_dates: timeArray
-        }), command.isDryRun);
+        }));
     });
 })();

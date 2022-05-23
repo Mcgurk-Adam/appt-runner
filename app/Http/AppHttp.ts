@@ -2,8 +2,9 @@ const fetch = require("node-fetch");
 // @ts-ignore I hate hate hate ignoring this...but it just isn't an issue
 class AppHttp {
     private readonly appDomain:string;
+    private readonly isDryRun:boolean;
     private fetchOptions;
-    constructor() {
+    constructor(isDryRun = false) {
         this.appDomain = process.env.APP_URL;
         const appToken = process.env.APP_TOKEN;
         this.fetchOptions = {
@@ -14,19 +15,20 @@ class AppHttp {
                 "Auth-Token": appToken,
             }
         };
+        this.isDryRun = isDryRun;
     }
-    async get(path:string, isDryRun = true) {
+    async get(path:string) {
         this.fetchOptions.method = "GET";
-        if (isDryRun) {
+        if (this.isDryRun) {
             console.log(`Would GET ${this.appDomain + path}`);
         } else {
             const req = await fetch(this.appDomain + path, this.fetchOptions);
             return await AppHttp.handleResponse(req);
         }
     }
-    async post(path:string, data:string, isDryRun = true) {
+    async post(path:string, data:string) {
         this.fetchOptions.body = data;
-        if (isDryRun) {
+        if (this.isDryRun) {
             console.log(`Would POST to ${this.appDomain + path} with body of ${data}`);
         } else {
             const req = await fetch(this.appDomain + path, this.fetchOptions);

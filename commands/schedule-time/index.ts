@@ -3,6 +3,8 @@ const chrome = require('selenium-webdriver/chrome');
 // @ts-ignore I hate hate hate ignoring this...but it just isn't an issue
 const { Command } = require("../../app/Command");
 // @ts-ignore I hate hate hate ignoring this...but it just isn't an issue
+const { AppHttp } = require("../../app/Http/AppHttp");
+// @ts-ignore I hate hate hate ignoring this...but it just isn't an issue
 const { ElementInteraction } = require("../../app/Html/ElementInteraction");
 const command = new Command(process);
 command.validate();
@@ -66,32 +68,18 @@ console.log(`Trying to schedule available kids zone appointments on ${command.de
                 if (time === command.desiredTime) {
                     const tdTwo = await document.querySelector("td:nth-child(2)", row);
                     const reserveText = await tdTwo.getAttribute("innerHTML");
+                    const appHttp = new AppHttp(command.isDryRun);
                     if (reserveText === "" || !reserveText.includes("(")) {
                         console.log("Sorry, the signup period has passed");
                     } else if (reserveText.replace(/\s/g, '').includes("0 Open")) {
-                        console.log("Sorry, the kids zone is already booked");
+                        console.log("Kids zone already full");
+                        await appHttp.post("/github/confirm/booked", JSON.stringify({date: command.desiredDate, time: command.desiredTime}));
                     } else if (!reserveText.includes("Sign Up Now")) {
                         console.log("Signup period not open yet, will retry");
-                        if (command.isDryRun) {
-                            console.log(`Would call ${command.getEnvVariable("APP_URL")}/github/requeue with the payload of ${JSON.stringify({date: command.desiredDate, time: command.desiredTime})}`);
-                        } else {
-                            const fetchRequest = await fetch(`${command.getEnvVariable("APP_URL")}/github/requeue`, {
-                                method: "POST",
-                                headers: {
-                                    "Accept": "application/json",
-                                    "Content-Type": "application/json",
-                                    "Auth-Token": command.getEnvVariable("APP_TOKEN"),
-                                },
-                                body: JSON.stringify({
-                                    date: command.desiredDate,
-                                    time: command.desiredTime,
-                                })
-                            });
-                            if (!fetchRequest.ok) {
-                                console.log(`Fetch failed with the code of ${fetchRequest.status}`);
-                                process.exit(1);
-                            }
-                        }
+                        await appHttp.post("/github/requeue", JSON.stringify({
+                            date: command.desiredDate,
+                            time: command.desiredTime,
+                        }));
                     } else {
                         const signupButton = await document.querySelector("input[type=button]", tdTwo);
                         await signupButton.click();
@@ -110,6 +98,11 @@ console.log(`Trying to schedule available kids zone appointments on ${command.de
             console.log(`Would have successfully scheduled an appointment on ${command.desiredDate} at ${command.desiredTime}`);
         } else {
             await reservationButton.click();
+            const appHttp = new AppHttp(command.isDryRun);
+            await appHttp.post("/github/confirm/schedule", JSON.stringify({
+                date: command.desiredDate,
+                time: command.desiredTime,
+            }));
         }
     });
 })();
