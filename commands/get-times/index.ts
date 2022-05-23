@@ -1,6 +1,5 @@
 const { Builder, Key } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
-const fetch = require("node-fetch");
 // @ts-ignore I hate hate hate ignoring this...but it just isn't an issue
 const { Command } = require("../../app/Command");
 // @ts-ignore I hate hate hate ignoring this...but it just isn't an issue

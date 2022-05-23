@@ -9,6 +9,7 @@
 	"files": [
 		"../../app/Html/ElementInteraction.ts",
 		"../../app/Command.ts",
+		"../../app/Http/AppHttp.ts",
 		"index.ts"
 	]
 }
