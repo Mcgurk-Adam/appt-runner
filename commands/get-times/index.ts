@@ -3,7 +3,8 @@ const { login, navigateToKidsZone, goToCorrectDate } = require("../../app/action
 
 const { Builder } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
-const fetch = require("node-fetch");
+// @ts-ignore I hate hate hate ignoring this...but it just isn't an issue
+const { AppHttp } = require("../../app/Http/AppHttp");
 // @ts-ignore I hate hate hate ignoring this...but it just isn't an issue
 const { Command } = require("../../app/Command");
 // @ts-ignore I hate hate hate ignoring this...but it just isn't an issue
@@ -50,27 +51,9 @@ console.log(`Checking available kids zone appointments for ${command.desiredDate
                 timeArray.push(tdText.replace(/\s/g, '').replace(/[a-z]/gi, ''));
             }
         }
-        if (timeArray.length === 0) {
-            console.log(`There are no kids zone appointments to be scheduled for ${command.desiredDate}`);
-        }
-        if (command.isDryRun) {
-            console.log(`would call ${command.getEnvVariable("APP_URL")}/github/send-time-options with the payload of ${JSON.stringify({possible_dates: timeArray})}`);
-        } else {
-            const fetchRequest = await fetch(`${command.getEnvVariable("APP_URL")}/github/send-time-options`, {
-                method: "POST",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                    "Auth-Token": command.getEnvVariable("APP_TOKEN"),
-                },
-                body: JSON.stringify({
-                    possible_dates: timeArray,
-                })
-            });
-            if (!fetchRequest.ok) {
-                console.log(`Fetch failed with the code of ${fetchRequest.status}`);
-                process.exit(1);
-            }
-        }
+        const appHttp = new AppHttp(command.isDryRun);
+        await appHttp.post("/github/send-time-options", JSON.stringify({
+            possible_dates: timeArray
+        }));
     });
 })();
