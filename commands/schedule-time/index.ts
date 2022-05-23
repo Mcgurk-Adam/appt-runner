@@ -1,3 +1,4 @@
+// @ts-ignore hate ignoring this, it's just not an issue
 const { login } = require("../../app/actions");
 const { Builder, Key } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
@@ -13,6 +14,7 @@ const driver = new Builder().forBrowser("chrome").setChromeService(service).buil
 const document = new ElementInteraction(driver);
 console.log(`Trying to schedule available kids zone appointments on ${command.desiredDate} at ${command.desiredTime}`);
 (async () => {
+    console.log("we do get here");
     await command.performActionInBrowser("login", login(driver, document));
     await command.performActionInBrowser("navigate to kids zone", async () => {
         const kidsZoneLink = await document.getElementById("tabA104");

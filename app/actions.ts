@@ -1,8 +1,8 @@
+// @ts-ignore hate ignoring this, it's just not an issue
 const { Command } = require("./Command");
-const { ElementInteraction } = require("./Html/ElementInteraction");
 
-// @ts-ignore
-export async function login(driver, document:ElementInteraction): Promise<void> {
+// @ts-ignore hate ignoring this, it's just not an issue
+async function login(driver, document): Promise<void> {
     await driver.get(process.env.LOGIN_PAGE);
     const title = await driver.getTitle();
     if (!title.toLowerCase().includes(process.env.CONFIRMATION_TEXT)) {
@@ -16,3 +16,5 @@ export async function login(driver, document:ElementInteraction): Promise<void> 
     await document.type(passwordInput, process.env.PASSWORD);
     await document.click(loginButton);
 }
+
+module.exports.login = login;

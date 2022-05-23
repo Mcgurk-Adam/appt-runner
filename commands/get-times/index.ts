@@ -1,3 +1,4 @@
+// @ts-ignore hate ignoring this, it's just not an issue
 const { login } = require("../../app/actions");
 
 const { Builder, Key } = require('selenium-webdriver');
@@ -10,7 +11,6 @@ const { ElementInteraction } = require("../../app/Html/ElementInteraction");
 const command = new Command(process);
 command.validateNoTime();
 const service = new chrome.ServiceBuilder(process.env.CHROMEWEBDRIVER);
-console.log(process.env.CHROMEWEBDRIVER);
 const driver = new Builder().forBrowser("chrome").setChromeService(service).build();
 const document = new ElementInteraction(driver);
 console.log(`Checking available kids zone appointments for ${command.desiredDate}`);
