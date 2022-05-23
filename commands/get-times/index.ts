@@ -1,4 +1,7 @@
-const { Builder, Key } = require('selenium-webdriver');
+// @ts-ignore hate ignoring this, it's just not an issue
+const { login, navigateToKidsZone, goToCorrectDate } = require("../../app/actions");
+
+const { Builder } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 // @ts-ignore I hate hate hate ignoring this...but it just isn't an issue
 const { AppHttp } = require("../../app/Http/AppHttp");
@@ -9,40 +12,13 @@ const { ElementInteraction } = require("../../app/Html/ElementInteraction");
 const command = new Command(process);
 command.validateNoTime();
 const service = new chrome.ServiceBuilder(process.env.CHROMEWEBDRIVER);
-console.log(process.env.CHROMEWEBDRIVER);
 const driver = new Builder().forBrowser("chrome").setChromeService(service).build();
 const document = new ElementInteraction(driver);
 console.log(`Checking available kids zone appointments for ${command.desiredDate}`);
 (async () => {
-    await command.performActionInBrowser("login", async () => {
-        await driver.get(process.env.LOGIN_PAGE);
-        const title = await driver.getTitle();
-        if (!title.toLowerCase().includes(process.env.CONFIRMATION_TEXT)) {
-            throw new Error("Did not get to the page");
-        }
-        await Command.wait(2000);
-        const loginInput = await document.getElementByName("requiredtxtUserName");
-        const passwordInput = await document.getElementByName("requiredtxtPassword");
-        const loginButton = await document.getElementByName("btnSignUp2");
-        await document.type(loginInput, process.env.USERNAME);
-        await document.type(passwordInput, process.env.PASSWORD);
-        await document.click(loginButton);
-    });
-    await command.performActionInBrowser("navigate to kids zone", async () => {
-        const kidsZoneLink = await document.getElementById("tabA104");
-        await document.click(kidsZoneLink);
-    });
-    await command.performActionInBrowser("go to the correct date", async () => {
-        const dateInput = await document.getElementById("txtDate");
-        const dateValue = await dateInput.getAttribute("value");
-        await Command.wait(100);
-        for (let i = 0; i < dateValue.length; i++) {
-            await document.type(dateInput, Key.BACK_SPACE);
-            await Command.wait(50);
-        }
-        await document.type(dateInput, command.desiredDate);
-        await document.type(dateInput, Key.RETURN);
-    });
+    await command.performActionInBrowser("login", async () => await login(driver, document));
+    await command.performActionInBrowser("navigate to kids zone", async () => await navigateToKidsZone(document));
+    await command.performActionInBrowser("go to the correct date", async () => await goToCorrectDate(document, command.desiredDate));
     await command.performActionInBrowser("get all the possible times", async () => {
         const dateObject = new Date(command.desiredDate);
         const dayArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
