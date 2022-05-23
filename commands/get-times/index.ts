@@ -15,7 +15,7 @@ const driver = new Builder().forBrowser("chrome").setChromeService(service).buil
 const document = new ElementInteraction(driver);
 console.log(`Checking available kids zone appointments for ${command.desiredDate}`);
 (async () => {
-    await command.performActionInBrowser("login", login(driver, document));
+    await command.performActionInBrowser("login", async () => await login(driver, document));
     await command.performActionInBrowser("navigate to kids zone", async () => {
         const kidsZoneLink = await document.getElementById("tabA104");
         await document.click(kidsZoneLink);
