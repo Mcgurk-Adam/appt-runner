@@ -56,6 +56,8 @@ class Command {
         try {
             await Command.wait(1500);
             console.log(`${actionName}`);
+            console.log(typeof action);
+            console.log(action);
             await action();
             console.log(`Completed ${actionName}`);
             await Command.wait(1500);
