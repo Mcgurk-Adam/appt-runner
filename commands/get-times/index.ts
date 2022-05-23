@@ -1,4 +1,4 @@
-import {login} from "../../app/actions";
+const { login } = require("../../app/actions");
 
 const { Builder, Key } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');

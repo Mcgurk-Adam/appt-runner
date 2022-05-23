@@ -7,6 +7,7 @@
 		"moduleResolution": "Node"
 	},
 	"files": [
+		"../../app/actions.ts",
 		"../../app/Html/ElementInteraction.ts",
 		"../../app/Command.ts",
 		"index.ts"
