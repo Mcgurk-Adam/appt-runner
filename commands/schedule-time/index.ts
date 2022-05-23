@@ -68,7 +68,6 @@ console.log(`Trying to schedule available kids zone appointments on ${command.de
         }
     });
     await command.performActionInBrowser("schedule the appointment", async () => {
-
         const reservationButton = await document.querySelector(process.env.SCHEDULE_BUTTON_SELECTOR);
         if (command.isDryRun) {
             console.log(`Would have successfully scheduled an appointment on ${command.desiredDate} at ${command.desiredTime}`);
