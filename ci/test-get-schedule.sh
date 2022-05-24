@@ -1,5 +1,4 @@
 #!/bin/bash
-export CHROMEWEBDRIVER="./drivers/chromedriver_101_intel"
 npm i
 cd commands/get-times || exit 1
 ../../node_modules/.bin/tsc
