@@ -11,7 +11,7 @@ class ElementInteraction {
         return await this.retrieve(By.css(query), false, parentElement);
     }
     async querySelectorAll(query:string, parentElement = null) {
-        return await this.retrieve(By.css(query), false, parentElement);
+        return await this.retrieve(By.css(query), true, parentElement);
     }
     async getElementById(id:string, parentElement = null) {
         return await this.retrieve(By.id(id), false, parentElement);
