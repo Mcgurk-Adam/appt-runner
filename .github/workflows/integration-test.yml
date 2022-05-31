@@ -15,7 +15,47 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-      - name: Run Integration Test
+      - name: Run Scrape Schedule Integration Test \#1
+        continue-on-error: true
+        id: runGet1
         run: ./ci/test-get-schedule.sh
-      - name: Run Schedule Integration Test
+      - name: Run Scrape Schedule Integration Test \#2
+        continue-on-error: true
+        id: runGet2
+        if: steps.runGet1.outcome=='failure'
+        run: ./ci/test-get-schedule.sh
+      - name: Run Scrape Schedule Integration Test \#3
+        continue-on-error: true
+        id: runGet3
+        if: steps.runGet2.outcome=='failure'
+        run: ./ci/test-get-schedule.sh
+      - name: Check Run Scrape Schedule Integration Test Passed
+        if: always()
+        run: |
+          if ${{ steps.runGet1.outcome=='success' || steps.runGet2.outcome=='success' || steps.runGet3.outcome=='success' }}; then
+            echo perfect
+          else
+            exit 1
+          fi
+      - name: Run Schedule Appointment Integration Test \#1
+        continue-on-error: true
+        id: runSet1
         run: ./ci/test-schedule-time.sh
+      - name: Run Schedule Appointment Integration Test \#2
+        continue-on-error: true
+        id: runSet2
+        if: steps.runSet1.outcome=='failure'
+        run: ./ci/test-schedule-time.sh
+      - name: Run Schedule Appointment Integration Test \#3
+        continue-on-error: true
+        id: runSet3
+        if: steps.runSet2.outcome=='failure'
+        run: ./ci/test-schedule-time.sh
+      - name: Check Run Schedule Appointment Integration Test Passed
+        if: always()
+        run: |
+          if ${{ steps.runSet1.outcome=='success' || steps.runSet2.outcome=='success' || steps.runSet3.outcome=='success' }}; then
+            echo perfect
+          else
+            exit 1
+          fi
