@@ -6,8 +6,8 @@ const { Key } = require('selenium-webdriver');
 async function login(driver, document): Promise<void> {
     await driver.get(process.env.LOGIN_PAGE);
     const title = await driver.getTitle();
-    if (!title.toLowerCase().includes(process.env.CONFIRMATION_TEXT)) {
-        throw new Error("Did not get to the page");
+    if (!title.toLowerCase().includes(process.env.CONFIRMATION_TEXT.toLowerCase())) {
+        throw new Error(`Did not get to the page because the title reads: ${title.toLowerCase()}`);
     }
     await Command.wait(2000);
     const loginInput = await document.getElementByName("requiredtxtUserName");
