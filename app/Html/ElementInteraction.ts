@@ -26,8 +26,10 @@ class ElementInteraction {
             try {
                 element = await this.handleRetrieve(byQuery, retrieveMultiple, parentElement);
             } catch (e) {
+                element = null;
                 console.log(`Failed to get an element with message of ${e.message}`);
             }
+            currentAttempts++;
         }
         return element;
     }
