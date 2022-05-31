@@ -1,6 +1,6 @@
 #!/bin/bash
 DRIVER="${CHROMEWEBDRIVER}"
-if test -f "$DRIVER"; then
+if [ -f "$DRIVER" ]; then
   sudo chmod 755 "$DRIVER"
 else
   echo "Chrome driver file doesn't exist. Value retrieved was $DRIVER"
