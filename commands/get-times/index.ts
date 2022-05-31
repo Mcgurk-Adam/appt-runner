@@ -11,7 +11,7 @@ const { Command } = require("../../app/Command");
 const { ElementInteraction } = require("../../app/Html/ElementInteraction");
 const command = new Command(process);
 command.validateNoTime();
-const service = new chrome.ServiceBuilder(process.env.CHROMEWEBDRIVER);
+const service = new chrome.ServiceBuilder(`.${process.env.CHROMEWEBDRIVER}`);
 const driver = new Builder().forBrowser("chrome").setChromeService(service).build();
 const document = new ElementInteraction(driver);
 console.log(`Checking available kids zone appointments for ${command.desiredDate}`);
