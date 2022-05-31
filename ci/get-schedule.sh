@@ -1,4 +1,5 @@
 #!/bin/bash
+./setup-chromedriver.sh
 npm i
 cd commands/get-times || exit 1
 ../../node_modules/.bin/tsc
