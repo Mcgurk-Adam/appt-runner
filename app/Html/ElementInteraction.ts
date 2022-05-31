@@ -38,5 +38,13 @@ class ElementInteraction {
             return parentElement == null ? await this.driver.findElement(byQuery) : await parentElement.findElement(byQuery);
         }
     }
+    async type(element, value:string): Promise<void> {
+        await element.sendKeys(value);
+        await Command.wait(50);
+    }
+    async click(element): Promise<void> {
+        await element.click();
+        await Command.wait(50);
+    }
 }
 module.exports.ElementInteraction = ElementInteraction;
