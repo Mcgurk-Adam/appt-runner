@@ -8,37 +8,34 @@ class ElementInteraction {
         this.driver = driver;
     }
     async querySelector(query:string, parentElement = null) {
-        try {
-            if (parentElement) {
-                return await parentElement.findElement(By.css(query));
-            }
-            return await this.driver.findElement(By.css(query));
-        } catch (e) {
-            return null;
-        }
+        return await this.retrieve(By.css(query), false, parentElement);
     }
     async querySelectorAll(query:string, parentElement = null) {
-        try {
-            if (parentElement) {
-                return await parentElement.findElements(By.css(query));
+        return await this.retrieve(By.css(query), true, parentElement);
+    }
+    async getElementById(id:string, parentElement = null) {
+        return await this.retrieve(By.id(id), false, parentElement);
+    }
+    async getElementByName(name:string, parentElement = null) {
+        return await this.retrieve(By.name(name), false, parentElement);
+    }
+    private async retrieve(byQuery, retrieveMultiple:boolean = false, parentElement = null) {
+        let currentAttempts = 0;
+        let element = null;
+        while (currentAttempts < 3 && element == null) {
+            try {
+                element = await this.handleRetrieve(byQuery, retrieveMultiple, parentElement);
+            } catch (e) {
+                console.log(`Failed to get an element with message of ${e.message}`);
             }
-            return await this.driver.findElements(By.css(query));
-        } catch (e) {
-            return null;
         }
+        return element;
     }
-    async getElementById(id:string) {
-        try {
-            return await this.driver.findElement(By.id(id));
-        } catch (e) {
-            return null;
-        }
-    }
-    async getElementByName(name:string) {
-        try {
-            return await this.driver.findElement(By.name(name));
-        } catch (e) {
-            return null;
+    private async handleRetrieve(byQuery, retrieveMultiple:boolean, parentElement) {
+        if (retrieveMultiple) {
+            return parentElement == null ? await this.driver.findElements(byQuery) : await parentElement.findElements(byQuery);
+        } else {
+            return parentElement == null ? await this.driver.findElement(byQuery) : await parentElement.findElement(byQuery);
         }
     }
     async type(element, value:string): Promise<void> {
