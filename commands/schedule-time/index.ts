@@ -10,7 +10,7 @@ const { AppHttp } = require("../../app/Http/AppHttp");
 const { ElementInteraction } = require("../../app/Html/ElementInteraction");
 const command = new Command(process);
 command.validate();
-const service = new chrome.ServiceBuilder(process.env.CHROMEWEBDRIVER);
+const service = new chrome.ServiceBuilder(Command.chromeDriverName);
 const driver = new Builder().forBrowser("chrome").setChromeService(service).build();
 const document = new ElementInteraction(driver);
 console.log(`Trying to schedule available kids zone appointments on ${command.desiredDate} at ${command.desiredTime}`);
