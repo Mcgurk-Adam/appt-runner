@@ -1,5 +1,4 @@
 #!/bin/bash
-./ci/setup-chromedriver.sh || exit 1
 npm i
 cd commands/schedule-time || exit 1
 ../../node_modules/.bin/tsc

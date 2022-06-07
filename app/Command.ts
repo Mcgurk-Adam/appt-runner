@@ -25,7 +25,7 @@ class Command {
         } else {
             Command.badArgumentErrors("Time must be provided and match the format HH:MM");
         }
-        const rawDriverName = this.getEnvVariable(Command.DRIVER_ENV_NAME);
+        const rawDriverName = `${this.getEnvVariable(Command.DRIVER_ENV_NAME)}/chromedriver`;
         if (rawDriverName && fs.existsSync(rawDriverName)) {
             this.chromeDriverName = rawDriverName;
         } else {
@@ -40,7 +40,7 @@ class Command {
         } else {
             Command.badArgumentErrors("Date must be provided and match the format mm/dd/yyyy");
         }
-        const rawDriverName = this.getEnvVariable(Command.DRIVER_ENV_NAME);
+        const rawDriverName = `${this.getEnvVariable(Command.DRIVER_ENV_NAME)}/chromedriver`;
         if (rawDriverName && fs.existsSync(rawDriverName)) {
             this.chromeDriverName = rawDriverName;
         } else {
