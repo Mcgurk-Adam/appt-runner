@@ -17,5 +17,25 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-      - name: Pull the schedule times
+      - name: Pull the schedule times \#1
+        continue-on-error: true
+        id: runGet1
         run: ./ci/get-schedule.sh ${{ github.event.client_payload.check_schedule_date }}
+      - name: Pull the schedule times \#2
+        continue-on-error: true
+        id: runGet2
+        if: steps.runGet1.outcome=='failure'
+        run: ./ci/get-schedule.sh ${{ github.event.client_payload.check_schedule_date }}
+      - name: Pull the schedule times \#3
+        continue-on-error: true
+        id: runGet3
+        if: steps.runGet2.outcome=='failure'
+        run: ./ci/get-schedule.sh ${{ github.event.client_payload.check_schedule_date }}
+      - name: Check Pull the schedule times Passed
+        if: always()
+        run: |
+          if ${{ steps.runGet1.outcome=='success' || steps.runGet2.outcome=='success' || steps.runGet3.outcome=='success' }}; then
+            echo perfect
+          else
+            exit 1
+          fi
